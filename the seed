@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grow Green Daily — The Seed</title>
+  <meta name="description" content="Build daily habits that grow. A calm, minimalist green landing page." />
+
+  <style>
+    :root{
+      --bg: #0b1410;
+      --bg2:#07100c;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --muted2: rgba(255,255,255,.58);
+      --green: #47ff9a;
+      --green2:#21d07a;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1120px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(71,255,154,.18), transparent 60%),
+        radial-gradient(700px 500px at 85% 20%, rgba(33,208,122,.14), transparent 55%),
+        radial-gradient(800px 600px at 55% 95%, rgba(71,255,154,.10), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    button{font-family:inherit}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 20px 84px}
+
+    /* Top nav */
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      z-index:20;
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(11,20,16,.72), rgba(11,20,16,.36));
+      border-bottom:1px solid rgba(255,255,255,.06);
+      padding:14px 20px;
+      margin: -28px -20px 0;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px}
+    .logo{
+      width:34px; height:34px; border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, rgba(71,255,154,.95), rgba(33,208,122,.65));
+      box-shadow: 0 10px 30px rgba(33,208,122,.25);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:before{
+      content:"";
+      position:absolute; inset:-18px -18px auto auto;
+      width:40px; height:40px; border-radius:999px;
+      background:rgba(255,255,255,.20);
+      transform:rotate(18deg);
+      filter: blur(.2px);
+    }
+    .navlinks{display:flex; align-items:center; gap:16px; color:var(--muted); font-weight:600; font-size:14px}
+    .navlinks a{padding:8px 10px; border-radius:12px}
+    .navlinks a:hover{background:rgba(255,255,255,.06); color:rgba(255,255,255,.86)}
+    .navcta{display:flex; gap:10px; align-items:center}
+
+    .btn{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.92);
+      padding:10px 14px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:14px;
+      cursor:pointer;
+      transition:.18s ease;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .btn:hover{transform: translateY(-1px); background:rgba(255,255,255,.09)}
+    .btn.primary{
+      border-color: rgba(71,255,154,.42);
+      background: linear-gradient(180deg, rgba(71,255,154,.22), rgba(71,255,154,.10));
+      box-shadow: 0 14px 40px rgba(33,208,122,.18);
+    }
+    .btn.primary:hover{
+      border-color: rgba(71,255,154,.60);
+      box-shadow: 0 16px 48px rgba(33,208,122,.24);
+    }
+    .btn .dot{
+      width:8px; height:8px; border-radius:99px;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(71,255,154,.14);
+    }
+
+    /* Hero */
+    .hero{padding:56px 0 20px; display:grid; grid-template-columns: 1.08fr .92fr; gap:34px; align-items:center}
+    .badge{
+      display:inline-flex; gap:10px; align-items:center;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      padding:9px 12px;
+      border-radius:999px;
+      color: rgba(255,255,255,.78);
+      font-weight:700;
+      font-size:13px;
+    }
+    .badge .leaf{
+      width:10px; height:10px; border-radius:3px 10px 10px 10px;
+      background: linear-gradient(180deg, rgba(71,255,154,.95), rgba(33,208,122,.70));
+      transform: rotate(-25deg);
+      box-shadow: 0 8px 24px rgba(71,255,154,.18);
+    }
+    h1{
+      margin:16px 0 10px;
+      font-size: clamp(34px, 4.3vw, 56px);
+      line-height:1.03;
+      letter-spacing:-.7px;
+    }
+    .sub{
+      margin:0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 54ch;
+    }
+    .heroactions{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+    .fineprint{margin-top:12px; color: var(--muted2); font-weight:600; font-size:13px}
+
+    /* Mock card */
+    .mock{
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .mock:before{
+      content:"";
+      position:absolute; inset: -120px -120px auto auto;
+      width:260px; height:260px; border-radius:999px;
+      background: radial-gradient(circle, rgba(71,255,154,.26), transparent 64%);
+    }
+    .mocktop{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:16px 16px 10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .mocktop .title{font-weight:800; letter-spacing:.2px}
+    .mocktop .pill{
+      font-size:12px; font-weight:800;
+      color: rgba(255,255,255,.80);
+      border:1px solid rgba(71,255,154,.30);
+      background: rgba(71,255,154,.10);
+      padding:7px 10px;
+      border-radius:999px;
+    }
+    .mockbody{padding:16px}
+    .streak{
+      display:flex; justify-content:space-between; align-items:flex-end; gap:10px;
+      padding:14px;
+      border-radius:18px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.10);
+    }
+    .streak h3{margin:0; font-size:14px; color:rgba(255,255,255,.85)}
+    .streak p{margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.4}
+    .streak .big{
+      font-size:26px; font-weight:900;
+      letter-spacing:-.6px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .list{margin-top:12px; display:grid; gap:10px}
+    .item{
+      display:flex; gap:12px; align-items:flex-start;
+      padding:12px 12px;
+      border-radius:16px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .check{
+      width:22px; height:22px; border-radius:8px;
+      background: rgba(71,255,154,.16);
+      border:1px solid rgba(71,255,154,.30);
+      display:flex; align-items:center; justify-content:center;
+      margin-top:1px;
+      flex: 0 0 auto;
+    }
+    .check svg{width:14px; height:14px}
+    .item b{display:block; font-size:13px}
+    .item span{display:block; margin-top:3px; color:var(--muted); font-size:13px; line-height:1.4}
+
+    /* Sections */
+    .section{padding:44px 0 0}
+    .sectionhead{
+      display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+      margin-bottom:18px;
+    }
+    .sectionhead h2{
+      margin:0;
+      font-size: clamp(22px, 2.4vw, 30px);
+      letter-spacing:-.4px;
+    }
+    .sectionhead p{
+      margin:0;
+      color: var(--muted);
+      max-width: 60ch;
+      line-height:1.5;
+      font-weight:600;
+      font-size:14px;
+    }
+
+    .grid3{display:grid; grid-template-columns: repeat(3, 1fr); gap:14px}
+    .card{
+      padding:16px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 12px 40px rgba(0,0,0,.28);
+      min-height: 138px;
+    }
+    .card .icon{
+      width:38px; height:38px; border-radius:14px;
+      background: rgba(71,255,154,.14);
+      border:1px solid rgba(71,255,154,.28);
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:10px;
+    }
+    .card h3{margin:0; font-size:15px}
+    .card p{margin:8px 0 0; color:var(--muted); font-weight:600; line-height:1.5; font-size:13px}
+
+    .split{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+
+    /* FAQ */
+    details{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    details + details{margin-top:10px}
+    summary{
+      cursor:pointer;
+      list-style:none;
+      font-weight:800;
+      color:rgba(255,255,255,.86);
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{
+      margin:10px 0 0;
+      color: var(--muted);
+      font-weight:600;
+      line-height:1.55;
+      font-size:13px;
+    }
+
+    /* CTA */
+    .cta{
+      margin-top:22px;
+      padding:18px;
+      border-radius: 24px;
+      border: 1px solid rgba(71,255,154,.26);
+      background: radial-gradient(700px 220px at 20% 10%, rgba(71,255,154,.18), transparent 60%),
+                  linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.05));
+      box-shadow: 0 22px 70px rgba(33,208,122,.14);
+      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .cta b{font-size:16px}
+    .cta span{display:block; margin-top:6px; color:var(--muted); font-weight:600; font-size:13px; line-height:1.45}
+    .foot{
+      margin-top:50px;
+      padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
+      color: var(--muted2);
+      font-weight:700;
+      font-size:13px;
+    }
+    .foot a{color: rgba(255,255,255,.72)}
+    .foot a:hover{color: rgba(255,255,255,.92)}
+
+    /* Responsive */
+    @media (max-width: 940px){
+      .hero{grid-template-columns:1fr; gap:18px}
+      .grid3{grid-template-columns:1fr}
+      .split{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>Grow Green Daily</div>
+    </div>
+
+    <div class="navlinks" aria-label="Navigation">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </div>
+
+    <div class="navcta">
+      <a class="btn" href="#faq">See FAQ</a>
+      <a class="btn primary" href="#start"><span class="dot"></span>Start today</a>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="hero" id="start">
+      <div>
+        <div class="badge"><span class="leaf" aria-hidden="true"></span> The Seed — build habits that actually stick</div>
+        <h1>Grow daily. <span style="color:var(--green)">Stay consistent</span>. Feel lighter.</h1>
+        <p class="sub">
+          A calm tracker that turns tiny actions into momentum.
+          No guilt, no noise — just a simple system that grows with you.
+        </p>
+
+        <div class="heroactions">
+          <button class="btn primary" id="btnDemo"><span class="dot"></span>Open demo</button>
+          <a class="btn" href="#features">Explore features</a>
+        </div>
+
+        <div class="fineprint">Free template • Works on mobile • Minimalist & fast</div>
+      </div>
+
+      <div class="mock" aria-label="App preview">
+        <div class="mocktop">
+          <div class="title">Today</div>
+          <div class="pill">Streak: <span id="streak">7</span> days</div>
+        </div>
+
+        <div class="mockbody">
+          <div class="streak">
+            <div>
+              <h3>Your seed is growing</h3>
+              <p>Do 3 small actions today. Keep it effortless.</p>
+            </div>
+            <div class="big" id="progress">2/3</div>
+          </div>
+
+          <div class="list" role="list">
+            <div class="item" role="listitem">
+              <div class="check" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="rgba(71,255,154,.95)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>10 minutes walk</b>
+                <span>Low friction. Just move a bit.</span>
+              </div>
+            </div>
+
+            <div class="item" role="listitem">
+              <div class="check" aria-hidden="true" style="background:rgba(71,255,154,.10); border-color:rgba(71,255,154,.22)">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="rgba(71,255,154,.55)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>15 minutes deep work</b>
+                <span>One task. Timer on. Phone away.</span>
+              </div>
+            </div>
+
+            <div class="item" role="listitem">
+              <div class="check" aria-hidden="true" style="background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.12)">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="rgba(255,255,255,.22)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>Protein target</b>
+                <span>Simple macro check, no obsession.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="sectionhead">
+        <h2>What you get</h2>
+        <p>Minimal, clean, and designed to feel like a “calm dashboard”.</p>
+      </div>
+
+      <div class="grid3">
+        <div class="card">
+          <div class="icon" aria-hidden="true">🌱</div>
+          <h3>Daily focus</h3>
+          <p>Pick 1–3 tiny habits. Build momentum without burning out.</p>
+        </div>
+        <div class="card">
+          <div class="icon" aria-hidden="true">🧠</div>
+          <h3>Low guilt system</h3>
+          <p>Miss a day? You don’t “reset”. You just continue.</p>
+        </div>
+        <div class="card">
+          <div class="icon" aria-hidden="true">📈</div>
+          <h3>Visible growth</h3>
+          <p>Streaks + progress that feel rewarding, not stressful.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="sectionhead">
+        <h2>How it works</h2>
+        <p>3 steps. Keep it boringly simple — that’s the point.</p>
+      </div>
+
+      <div class="split">
+        <div class="card">
+          <h3>1) Choose your “seed”</h3>
+          <p>Example: walk 10 min, read 5 pages, 15 min deep work. Tiny wins only.</p>
+        </div>
+        <div class="card">
+          <h3>2) Track daily</h3>
+          <p>A single checkbox per habit. No long journaling required.</p>
+        </div>
+        <div class="card">
+          <h3>3) Review weekly</h3>
+          <p>Spot what works, remove what doesn’t. Keep only the essentials.</p>
+        </div>
+        <div class="card">
+          <h3>Bonus: “calm UI”</h3>
+          <p>Dark minimal aesthetic + green accent, cards, soft borders, no clutter.</p>
+        </div>
+      </div>
+
+      <div class="cta">
+        <div>
+          <b>Want this as a real app (login + DB + dashboard)?</b>
+          <span>Je peux te transformer cette landing en Next.js + Supabase + auth + tables (habits, streaks, stats).</span>
+        </div>
+        <a class="btn primary" href="#faq"><span class="dot"></span>Next step</a>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="sectionhead">
+        <h2>FAQ</h2>
+        <p>Si tu veux un clone “pixel perfect”, il me faut un screenshot du site.</p>
+      </div>
+
+      <details>
+        <summary>Comment je l’héberge ?</summary>
+        <p>Le plus simple : Vercel / Netlify (drag & drop) ou GitHub Pages. Là, c’est un seul fichier HTML.</p>
+      </details>
+
+      <details>
+        <summary>Tu peux le rendre identique au lien ?</summary>
+        <p>Oui, mais j’ai besoin du contenu exact (au minimum 2–3 captures d’écran : hero + sections + footer), parce que je ne peux pas lire correctement le rendu du site depuis ici.</p>
+      </details>
+
+      <details>
+        <summary>Tu peux le convertir en React/Next.js ?</summary>
+        <p>Oui. Je peux te sortir un projet Next.js prêt à run, avec composants, styles et déploiement Vercel.</p>
+      </details>
+
+    </section>
+
+    <footer class="foot">
+      <div>© <span id="year"></span> Grow Green Daily • The Seed</div>
+      <div style="display:flex; gap:14px; flex-wrap:wrap">
+        <a href="#start">Top</a>
+        <a href="#features">Features</a>
+        <a href="#how">How</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Tiny demo interaction
+    const year = new Date().getFullYear();
+    document.getElementById("year").textContent = year;
+
+    const btnDemo = document.getElementById("btnDemo");
+    const progressEl = document.getElementById("progress");
+    const streakEl = document.getElementById("streak");
+
+    let done = 2;
+    let total = 3;
+    let streak = 7;
+
+    function render(){
+      progressEl.textContent = `${done}/${total}`;
+      streakEl.textContent = `${streak}`;
+    }
+    render();
+
+    btnDemo.addEventListener("click", () => {
+      done = (done + 1) % (total + 1);
+      if(done === total) streak += 1;
+      render();
+      btnDemo.textContent = done === 0 ? "Open demo" : "Keep going";
+      btnDemo.classList.add("primary");
+    });
+  </script>
+</body>
+</html>
