@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoTracker - Ton Empreinte Environnementale</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const EcoTracker = () => {
+            const [activeTab, setActiveTab] = useState('mobile');
+            const [impacts, setImpacts] = useState({
+                mobile: { value: 0, unit: 'GB' },
+                accommodation: { value: 0, unit: 'm²' },
+                energy: { value: 0, unit: 'kWh' },
+                water: { value: 0, unit: 'L' },
+                ai: { value: 0, unit: 'requêtes' },
+                food: { value: 0, unit: 'kcal' }
+            });
+
+            const [totalCO2, setTotalCO2] = useState(0);
+
+            // Facteurs de conversion en kg CO2
+            const conversionFactors = {
+                mobile: 0.015,      // kg CO2 par GB
+                accommodation: 0.2,  // kg CO2 par m² par jour (chauffage moyen)
+                energy: 0.4,        // kg CO2 par kWh (mix énergétique)
+                water: 0.0003,      // kg CO2 par litre
+                ai: 0.005,          // kg CO2 par requête IA
+                food: 0.003         // kg CO2 par kcal (moyenne)
+            };
+
+            const calculateCO2 = () => {
+                let total = 0;
+                Object.keys(impacts).forEach(key => {
+                    total += impacts[key].value * conversionFactors[key];
+                });
+                setTotalCO2(total);
+            };
+
+            useEffect(() => {
+                calculateCO2();
+            }, [impacts]);
+
+            const updateImpact = (category, value) => {
+                setImpacts(prev => ({
+                    ...prev,
+                    [category]: { ...prev[category], value: parseFloat(value) || 0 }
+                }));
+            };
+
+            const categories = [
+                { 
+                    id: 'mobile', 
+                    name: 'Données Mobiles', 
+                    icon: '📱',
+                    description: 'Streaming, navigation, réseaux sociaux',
+                    tip: 'Télécharge tes playlists et vidéos en WiFi'
+                },
+                { 
+                    id: 'accommodation', 
+                    name: 'Logement', 
+                    icon: '🏠',
+                    description: 'Surface de ton logement',
+                    tip: 'Baisse le chauffage d\'1°C = -7% de conso'
+                },
+                { 
+                    id: 'energy', 
+                    name: 'Énergie', 
+                    icon: '⚡',
+                    description: 'Consommation électrique quotidienne',
+                    tip: 'Débranche les appareils en veille'
+                },
+                { 
+                    id: 'water', 
+                    name: 'Eau', 
+                    icon: '💧',
+                    description: 'Consommation d\'eau quotidienne',
+                    tip: 'Douche de 5 min = 60L, bain = 150L'
+                },
+                { 
+                    id: 'ai', 
+                    name: 'Usage IA', 
+                    icon: '🤖',
+                    description: 'Requêtes ChatGPT, Claude, etc.',
+                    tip: 'Une recherche IA = 10x une recherche Google'
+                },
+                { 
+                    id: 'food', 
+                    name: 'Alimentation', 
+                    icon: '🍽️',
+                    description: 'Calories consommées',
+                    tip: 'Viande rouge = 10x plus d\'impact que légumes'
+                }
+            ];
+
+            const getImpactLevel = () => {
+                if (totalCO2 < 5) return { level: 'Excellent', color: '#22c55e', emoji: '🌱' };
+                if (totalCO2 < 15) return { level: 'Bon', color: '#059669', emoji: '🌿' };
+                if (totalCO2 < 30) return { level: 'Moyen', color: '#a16207', emoji: '⚠️' };
+                return { level: 'À améliorer', color: '#92400e', emoji: '🔥' };
+            };
+
+            const impact = getImpactLevel();
+
+            return (
+                <div style={{
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    background: 'linear-gradient(135deg, #2d5016 0%, #4a7c59 50%, #8b7355 100%)',
+                    minHeight: '100vh',
+                    padding: '20px',
+                    color: '#fff'
+                }}>
+                    {/* Header */}
+                    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                            <h1 style={{ fontSize: '3em', margin: '0', textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>
+                                🌍 EcoTracker
+                            </h1>
+                            <p style={{ fontSize: '1.2em', opacity: 0.9 }}>
+                                Mesure ton impact environnemental quotidien
+                            </p>
+                        </div>
+
+                        {/* Impact Total Card */}
+                        <div style={{
+                            background: 'rgba(255,255,255,0.95)',
+                            borderRadius: '20px',
+                            padding: '30px',
+                            marginBottom: '30px',
+                            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                            color: '#333'
+                        }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ fontSize: '4em', marginBottom: '10px' }}>
+                                    {impact.emoji}
+                                </div>
+                                <h2 style={{ margin: '0 0 10px 0', color: impact.color }}>
+                                    {totalCO2.toFixed(2)} kg CO₂
+                                </h2>
+                                <p style={{ fontSize: '1.3em', color: impact.color, fontWeight: 'bold' }}>
+                                    Impact: {impact.level}
+                                </p>
+                                <p style={{ color: '#666', marginTop: '15px' }}>
+                                    Équivalent à {(totalCO2 / 0.12).toFixed(0)} km en voiture 🚗
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Categories Grid */}
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                            gap: '20px',
+                            marginBottom: '30px'
+                        }}>
+                            {categories.map(cat => (
+                                <div key={cat.id} style={{
+                                    background: cat.id === 'water' ? 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)' : 'rgba(255,255,255,0.95)',
+                                    borderRadius: '15px',
+                                    padding: '25px',
+                                    boxShadow: '0 5px 20px rgba(0,0,0,0.15)',
+                                    transition: 'transform 0.2s',
+                                    cursor: 'pointer',
+                                    color: '#333',
+                                    border: cat.id === 'water' ? '2px solid #0ea5e9' : 'none'
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
+                                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                                    <div style={{ fontSize: '2.5em', marginBottom: '10px' }}>
+                                        {cat.icon}
+                                    </div>
+                                    <h3 style={{ margin: '0 0 10px 0', fontSize: '1.3em' }}>
+                                        {cat.name}
+                                    </h3>
+                                    <p style={{ color: '#666', fontSize: '0.9em', marginBottom: '15px' }}>
+                                        {cat.description}
+                                    </p>
+                                    
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        step="0.1"
+                                        placeholder={`Quantité (${impacts[cat.id].unit})`}
+                                        value={impacts[cat.id].value || ''}
+                                        onChange={e => updateImpact(cat.id, e.target.value)}
+                                        style={{
+                                            width: '100%',
+                                            padding: '12px',
+                                            border: '2px solid #e5e7eb',
+                                            borderRadius: '8px',
+                                            fontSize: '1em',
+                                            marginBottom: '10px',
+                                            boxSizing: 'border-box'
+                                        }}
+                                    />
+                                    
+                                    <div style={{
+                                        background: '#f3f4f6',
+                                        padding: '10px',
+                                        borderRadius: '8px',
+                                        fontSize: '0.85em'
+                                    }}>
+                                        <strong>💡 {(impacts[cat.id].value * conversionFactors[cat.id]).toFixed(3)} kg CO₂</strong>
+                                    </div>
+
+                                    <div style={{
+                                        marginTop: '10px',
+                                        padding: '10px',
+                                        background: '#dcfce7',
+                                        borderRadius: '8px',
+                                        fontSize: '0.8em',
+                                        color: '#166534'
+                                    }}>
+                                        💚 {cat.tip}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Comparisons */}
+                        <div style={{
+                            background: 'rgba(255,255,255,0.95)',
+                            borderRadius: '15px',
+                            padding: '25px',
+                            boxShadow: '0 5px 20px rgba(0,0,0,0.15)',
+                            color: '#333'
+                        }}>
+                            <h3 style={{ marginTop: 0 }}>📊 Comparaisons</h3>
+                            <div style={{ display: 'grid', gap: '15px' }}>
+                                <div style={{ padding: '15px', background: '#f9fafb', borderRadius: '8px' }}>
+                                    <strong>🌳 Arbres nécessaires:</strong> {(totalCO2 / 21).toFixed(1)} arbres/an pour compenser
+                                </div>
+                                <div style={{ padding: '15px', background: '#f9fafb', borderRadius: '8px' }}>
+                                    <strong>✈️ Vol Paris-Londres:</strong> {(totalCO2 / 60).toFixed(2)} trajets
+                                </div>
+                                <div style={{ padding: '15px', background: '#f9fafb', borderRadius: '8px' }}>
+                                    <strong>🔌 Ampoule LED:</strong> {(totalCO2 / 0.01).toFixed(0)} heures d'éclairage
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div style={{ textAlign: 'center', marginTop: '40px', opacity: 0.8 }}>
+                            <p>🌱 Chaque geste compte pour la planète</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<EcoTracker />, document.getElementById('root'));
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+    </style>
+</body>
+</html>
